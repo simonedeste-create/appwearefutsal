@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "We are futsal",
+    "slug": "wearefutsal",
+    "scheme": "wearefutsal",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#050B2E",
+    "ios": {
+      "bundleIdentifier": "it.lnd.wearefutsal",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "it.lnd.wearefutsal",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#050B2E"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "backgroundColor": "#050B2E"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
