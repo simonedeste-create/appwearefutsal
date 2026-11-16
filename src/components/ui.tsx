@@ -1,12 +1,29 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../auth/AuthContext';
 import { config } from '../config';
+import type { Broadcast } from '../data/types';
 import { colors, radius, space, type } from '../theme';
 
 export const openUrl = (url?: string) => { if (url) Linking.openURL(url).catch(() => undefined); };
+
+/** Apre un video dentro l'app (browser integrato) se previsto da config, altrimenti fuori. */
+export const openVideo = (url?: string) => {
+  if (!url) return;
+  if (config.futsalTv.openInApp) {
+    WebBrowser.openBrowserAsync(url, { toolbarColor: colors.bg, controlsColor: colors.lime, dismissButtonStyle: 'close' }).catch(() => openUrl(url));
+  } else openUrl(url);
+};
+
+/** Restituisce la funzione per guardare un video: chiede l'accesso se config.authMode lo richiede. */
+export function useWatch() {
+  const { needsLogin } = useAuth();
+  return (url?: string) => (needsLogin('video') ? router.push('/accesso') : openVideo(url));
+}
 
 export function Screen({ children, title, back, right, scroll = true }: {
   children: React.ReactNode; title?: string; back?: boolean; right?: React.ReactNode; scroll?: boolean;
@@ -85,8 +102,9 @@ export function LiveBadge({ clock }: { clock?: string }) {
 }
 
 export function FutsalTvButton({ url, label }: { url?: string; label?: 'LIVE' | 'REPLAY' }) {
+  const watch = useWatch();
   return (
-    <Pressable onPress={() => openUrl(url ?? config.futsalTvUrl)} style={s.ftv} accessibilityRole="link" accessibilityLabel="Guarda su FUTSAL TV">
+    <Pressable onPress={() => watch(url ?? config.futsalTv.url)} style={s.ftv} accessibilityRole="link" accessibilityLabel="Guarda su FUTSAL TV">
       <View style={s.ftvPlay}><Ionicons name="play" size={9} color={colors.white} /></View>
       <Text style={s.ftvText}>FUTSAL<Text style={{ color: colors.live }}>TV</Text></Text>
       {label ? <View style={s.ftvLabel}><Text style={s.ftvLabelText}>{label}</Text></View> : null}
@@ -107,6 +125,37 @@ export function PillButton({ label, icon, onPress, variant = 'lime' }: {
   );
 }
 
+const CHANNEL_STYLE: Record<Broadcast['channel'], { color: string; icon: keyof typeof Ionicons.glyphMap }> = {
+  'FUTSAL TV': { color: colors.live, icon: 'play-circle' },
+  'YouTube Divisione': { color: colors.youtube, icon: 'logo-youtube' },
+  'Sky Sport': { color: colors.sky, icon: 'tv' },
+};
+
+/** Etichetta "dove si vede": FUTSAL TV, YouTube della Divisione o Sky Sport. */
+export function BroadcastBadge({ channel }: { channel: Broadcast['channel'] }) {
+  const c = CHANNEL_STYLE[channel];
+  return (
+    <View style={[s.bc, { borderColor: c.color }]}>
+      <Ionicons name={c.icon} size={12} color={c.color} />
+      <Text style={s.bcText}>{channel}</Text>
+    </View>
+  );
+}
+
+/** Link ai canali social ufficiali della Divisione (elenco in config.social). */
+export function SocialLinks({ compact }: { compact?: boolean }) {
+  return (
+    <View style={[s.social, compact && { justifyContent: 'flex-start' }]}>
+      {config.social.map((x) => (
+        <Pressable key={x.id} onPress={() => openUrl(x.url)} style={s.socialBtn} accessibilityRole="link" accessibilityLabel={`Divisione Calcio a 5 su ${x.label}`}>
+          <Ionicons name={x.icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.ink} />
+          {compact ? null : <Text style={s.socialLabel}>{x.label}</Text>}
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
 export function Loading() {
   return <View style={{ padding: space.xxl }}><ActivityIndicator color={colors.lime} /></View>;
 }
@@ -116,6 +165,11 @@ export function Empty({ text }: { text: string }) {
 }
 
 export const s = StyleSheet.create({
+  bc: { flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderRadius: radius.pill, paddingHorizontal: 8, paddingVertical: 3, alignSelf: 'flex-start' },
+  bcText: { color: colors.ink, fontSize: 10, fontWeight: '800', letterSpacing: 0.4 },
+  social: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between' },
+  socialBtn: { alignItems: 'center', justifyContent: 'center', gap: 4, backgroundColor: colors.card, borderRadius: radius.m, borderWidth: 1, borderColor: colors.line, minWidth: 56, minHeight: 56, paddingHorizontal: 8, paddingVertical: 8 },
+  socialLabel: { color: colors.muted, fontSize: 10, fontWeight: '700' },
   safe: { flex: 1, backgroundColor: colors.bg },
   header: { flexDirection: 'row', alignItems: 'center', gap: space.m - 2, paddingHorizontal: space.l + 2, paddingVertical: space.s },
   logo: { width: 44, height: 30 },

@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { MatchCard } from '../../src/components/MatchCard';
-import { Card, Crest, IconButton, PillButton, Screen, Section, openUrl } from '../../src/components/ui';
+import { Card, Crest, IconButton, PillButton, Screen, Section, SocialLinks, openUrl } from '../../src/components/ui';
 import { config } from '../../src/config';
 import { data } from '../../src/data/source';
 import { useData } from '../../src/data/useData';
@@ -83,6 +83,9 @@ export default function Home() {
         </>
       ) : null}
 
+      <Section title="Segui la Divisione" />
+      <SocialLinks />
+      <View style={{ height: space.m }} />
       <PillButton label="Visita il sito della Divisione" variant="ghost" icon="open-outline" onPress={() => openUrl(config.siteUrl)} />
     </Screen>
   );

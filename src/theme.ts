@@ -17,6 +17,13 @@ export const colors = {
   live: '#FF3B3B',
   white: '#FFFFFF',
   onLime: '#061040',
+  liveDeep: '#2A0810', // fondo del riquadro "in diretta" di FUTSAL TV
+  liveTile: '#3A0A12',
+  error: 'rgba(255,59,59,0.85)',
+  tricoloreVerde: '#00923A', // filetto tricolore del brand LND
+  tricoloreRosso: '#E20613',
+  sky: '#0072C9', // etichetta trasmissione Sky Sport
+  youtube: '#FF0000', // etichetta canale YouTube della Divisione
 } as const;
 
 export const space = { xs: 4, s: 8, m: 12, l: 16, xl: 24, xxl: 32 } as const;

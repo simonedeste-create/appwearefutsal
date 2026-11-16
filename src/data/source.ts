@@ -19,7 +19,7 @@ export interface DataSource {
   topScorers(competitionId?: string, limit?: number): Promise<Player[]>;
   news(): Promise<NewsItem[]>;
   newsItem(id: string): Promise<NewsItem | undefined>;
-  videos(): Promise<Video[]>;
+  videos(filter?: { kind?: Video['kind']; competitionId?: string; matchId?: string }): Promise<Video[]>;
   products(): Promise<Product[]>;
   events(): Promise<EventModule[]>;
   event(slug: string): Promise<EventModule | undefined>;
@@ -68,7 +68,8 @@ export const mockSource: DataSource = {
     .slice(0, limit)),
   news: () => ok(mock.news),
   newsItem: (id) => ok(mock.news.find((n) => n.id === id)),
-  videos: () => ok(mock.videos),
+  videos: (f = {}) => ok(mock.videos.filter((v) =>
+    (!f.kind || v.kind === f.kind) && (!f.competitionId || v.competitionId === f.competitionId) && (!f.matchId || v.matchId === f.matchId))),
   products: () => ok(mock.products),
   events: () => ok(mock.events),
   event: (slug) => ok(mock.events.find((e) => e.slug === slug)),

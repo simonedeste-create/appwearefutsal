@@ -43,6 +43,8 @@ export interface Match {
   awayScore?: number;
   clock?: string;
   futsalTvUrl?: string;
+  /** dove si vede la gara: FUTSAL TV, canale YouTube della Divisione o Sky Sport */
+  broadcast?: Broadcast;
   events?: MatchEvent[];
 }
 
@@ -88,12 +90,25 @@ export interface NewsItem {
   imageUrl?: string;
 }
 
+export type Channel = 'FUTSAL TV' | 'YouTube Divisione' | 'Sky Sport';
+
+export interface Broadcast {
+  channel: Channel;
+  url: string;
+}
+
 export interface Video {
   id: string;
   title: string;
-  kind: 'live' | 'highlight' | 'replay' | 'rubrica';
-  duration?: string;
+  /** live = in onda ora; upcoming = in palinsesto; gli altri sono video on demand */
+  kind: 'live' | 'upcoming' | 'highlight' | 'replay' | 'rubrica';
+  channel: Channel;
   url: string;
+  competitionId?: string;
+  matchId?: string;
+  startsAt?: string; // ISO, per live e palinsesto
+  duration?: string;
+  subtitle?: string;
 }
 
 export interface Product {

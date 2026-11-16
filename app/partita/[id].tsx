@@ -2,7 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { fmtDay, fmtTime } from '../../src/components/MatchCard';
-import { Card, Chips, Crest, Empty, IconButton, LiveBadge, Loading, PillButton, Screen, openUrl } from '../../src/components/ui';
+import { BroadcastBadge, Card, Chips, Crest, Empty, IconButton, LiveBadge, Loading, PillButton, Screen, useWatch } from '../../src/components/ui';
 import { config } from '../../src/config';
 import { data } from '../../src/data/source';
 import { useData } from '../../src/data/useData';
@@ -14,6 +14,7 @@ export default function Partita() {
   const teams = useTeamMap();
   const match = useData(() => data.match(String(id)), [id]);
   const [tab, setTab] = useState<'cronaca' | 'formazioni'>('cronaca');
+  const watch = useWatch();
   const homeP = useData(() => (match.value ? data.players(match.value.homeId) : Promise.resolve([])), [match.value]);
   const awayP = useData(() => (match.value ? data.players(match.value.awayId) : Promise.resolve([])), [match.value]);
   if (match.loading) return <Screen back title="Match center"><Loading /></Screen>;
@@ -27,6 +28,7 @@ export default function Partita() {
       <Text style={st.teamName}>{(side === 'h' ? h : a)?.name}</Text>
     </Pressable>
   );
+  const channel = m.broadcast?.channel ?? 'FUTSAL TV';
   return (
     <Screen back title="Match center" right={<IconButton name="notifications-outline" label="Attiva notifiche per questa partita" />}>
       <View style={st.hero}>
@@ -38,9 +40,13 @@ export default function Partita() {
         </View>
         <View style={{ alignItems: 'center' }}>{m.status === 'live' ? <LiveBadge clock={m.clock} /> : <Text style={{ color: colors.muted, fontSize: 12 }}>{m.status === 'finished' ? 'Finale' : 'In programma'}</Text>}</View>
         <Text style={st.venue}>📍 {m.venue}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: space.s }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>{m.status === 'finished' ? 'Trasmessa su' : 'In diretta su'}</Text>
+          <BroadcastBadge channel={channel} />
+        </View>
       </View>
       <View style={{ flexDirection: 'row', gap: space.s, marginVertical: space.m }}>
-        <PillButton label={m.status === 'finished' ? 'Rivedi su FUTSAL TV' : 'Guarda su FUTSAL TV'} icon="play" variant="live" onPress={() => openUrl(m.futsalTvUrl ?? config.futsalTvUrl)} />
+        <PillButton label={m.status === 'finished' ? `Rivedi su ${channel === 'Sky Sport' ? 'FUTSAL TV' : channel}` : `Guarda su ${channel}`} icon="play" variant="live" onPress={() => watch(m.status === 'finished' ? (m.futsalTvUrl ?? config.futsalTv.url) : (m.broadcast?.url ?? m.futsalTvUrl ?? config.futsalTv.url))} />
         <PillButton label="Vota l'MVP" icon="star-outline" variant="ghost" />
       </View>
       <Chips items={[{ id: 'cronaca', label: 'Cronaca' }, { id: 'formazioni', label: 'Formazioni' }]} value={tab} onChange={setTab} />

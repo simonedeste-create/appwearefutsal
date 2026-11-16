@@ -120,7 +120,12 @@ function makeMatches(compId: string, currentRound: number, firstDate: string): M
         homeId: h,
         awayId: a,
         status,
-        futsalTvUrl: config.futsalTvUrl,
+        futsalTvUrl: config.futsalTv.url,
+        broadcast: mi === 3
+          ? { channel: 'Sky Sport', url: config.futsalTv.url }
+          : mi % 3 === 2
+            ? { channel: 'YouTube Divisione', url: config.futsalTv.youtubeUrl }
+            : { channel: 'FUTSAL TV', url: config.futsalTv.url },
       };
       if (status !== 'scheduled') {
         m.homeScore = Math.floor(r() * 6);
@@ -161,13 +166,31 @@ export const news: NewsItem[] = [
   { id: 'n3', tag: 'Nazionale', date: '2026-11-10', title: 'Italia – Ungheria a Castelnovo ne’ Monti', body: 'L’8 dicembre la Nazionale gioca al Palasport Giorgio Guidetti. Diretta su FUTSAL TV.' },
 ];
 
+// Video: dirette e palinsesto derivati dalle partite; highlights, replay e rubriche di esempio.
+const compName = (id: string) => competitions.find((c) => c.id === id)?.name ?? '';
+const teamName = (id: string) => teams.find((t) => t.id === id)?.name ?? '';
+const matchTitle = (mt: Match) => `${teamName(mt.homeId)} – ${teamName(mt.awayId)}`;
+
 export const videos: Video[] = [
-  { id: 'v1', title: 'Pesaro – Napoli', kind: 'live', url: config.futsalTvUrl },
-  { id: 'v2', title: 'Bitonto – Roma', kind: 'live', url: config.futsalTvUrl },
-  { id: 'v3', title: 'I gol dell’11ª giornata', kind: 'highlight', duration: '6:12', url: config.futsalTvUrl },
-  { id: 'v4', title: 'Top 5 parate', kind: 'highlight', duration: '3:40', url: config.futsalTvUrl },
-  { id: 'v5', title: 'Padova – Catania (integrale)', kind: 'replay', duration: '1:32:10', url: config.futsalTvUrl },
-  { id: 'v6', title: 'Futsal Magazine', kind: 'rubrica', duration: '24:00', url: config.futsalTvUrl },
+  ...matches.filter((mt) => mt.status === 'live').map((mt): Video => ({
+    id: `live-${mt.id}`, kind: 'live', title: matchTitle(mt), subtitle: `${compName(mt.competitionId)} · ${mt.roundLabel}`,
+    channel: mt.broadcast?.channel === 'YouTube Divisione' ? 'YouTube Divisione' : 'FUTSAL TV',
+    url: mt.broadcast?.url ?? config.futsalTv.url, competitionId: mt.competitionId, matchId: mt.id, startsAt: mt.date,
+  })),
+  ...matches.filter((mt) => mt.status === 'scheduled').sort((a, b) => a.date.localeCompare(b.date)).slice(0, 8).map((mt): Video => ({
+    id: `up-${mt.id}`, kind: 'upcoming', title: matchTitle(mt), subtitle: `${compName(mt.competitionId)} · ${mt.roundLabel}`,
+    channel: mt.broadcast?.channel ?? 'FUTSAL TV', url: mt.broadcast?.url ?? config.futsalTv.url,
+    competitionId: mt.competitionId, matchId: mt.id, startsAt: mt.date,
+  })),
+  ...matches.filter((mt) => mt.status === 'finished').slice(-6).reverse().map((mt): Video => ({
+    id: `rp-${mt.id}`, kind: 'replay', title: `${matchTitle(mt)} ${mt.homeScore}-${mt.awayScore}`, subtitle: 'Gara integrale',
+    channel: 'FUTSAL TV', url: config.futsalTv.url, competitionId: mt.competitionId, matchId: mt.id, duration: '1:32:00',
+  })),
+  { id: 'h1', kind: 'highlight', channel: 'FUTSAL TV', title: 'I gol dell’11ª giornata', subtitle: 'Serie A', competitionId: 'serie-a', duration: '6:12', url: config.futsalTv.url },
+  { id: 'h2', kind: 'highlight', channel: 'FUTSAL TV', title: 'Top 5 parate', subtitle: 'Serie A Femminile', competitionId: 'serie-a-f', duration: '3:40', url: config.futsalTv.url },
+  { id: 'h3', kind: 'highlight', channel: 'YouTube Divisione', title: 'Il gol della settimana', subtitle: 'Serie A', competitionId: 'serie-a', duration: '1:05', url: config.futsalTv.youtubeUrl },
+  { id: 'r1', kind: 'rubrica', channel: 'FUTSAL TV', title: 'Futsal Magazine', subtitle: 'Il settimanale della Divisione', duration: '24:00', url: config.futsalTv.url },
+  { id: 'r2', kind: 'rubrica', channel: 'FUTSAL TV', title: 'Verso le Finalissime', subtitle: 'Speciale Coppa Italia', duration: '12:30', url: config.futsalTv.url },
 ];
 
 export const products: Product[] = [
