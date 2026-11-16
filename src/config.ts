@@ -17,19 +17,16 @@ export const config = {
   futsalTv: {
     name: 'FUTSAL TV',
     url: 'https://www.futsaltv.it',
-    // Canale YouTube della Divisione, dove vanno in diretta le gare non trasmesse in TV. DA VERIFICARE l'indirizzo.
-    youtubeUrl: 'https://www.youtube.com/@divisionecalcioa5',
+    // Canale YouTube ufficiale della Divisione, dove vanno in diretta le gare non trasmesse in TV.
+    youtubeUrl: 'https://www.youtube.com/@DivisioneCalcioaCinque',
     /** Le dirette si aprono nel browser interno dell'app; con il player/SDK della piattaforma si potranno vedere dentro l'app. */
     openInApp: true,
   },
 
-  // Profili social ufficiali della Divisione. DA VERIFICARE tutti gli indirizzi prima della pubblicazione.
+  // Canali ufficiali della Divisione Calcio a 5 (come nelle descrizioni del canale YouTube ufficiale).
   social: [
-    { id: 'instagram', label: 'Instagram', icon: 'logo-instagram', url: 'https://www.instagram.com/divisionecalcioa5' },
-    { id: 'facebook', label: 'Facebook', icon: 'logo-facebook', url: 'https://www.facebook.com/divisionecalcioa5' },
-    { id: 'youtube', label: 'YouTube', icon: 'logo-youtube', url: 'https://www.youtube.com/@divisionecalcioa5' },
-    { id: 'tiktok', label: 'TikTok', icon: 'logo-tiktok', url: 'https://www.tiktok.com/@divisionecalcioa5' },
-    { id: 'x', label: 'X', icon: 'logo-twitter', url: 'https://x.com/divisionec5' },
+    { id: 'instagram', label: 'Instagram', handle: '@divisionecalcio5', icon: 'logo-instagram', url: 'https://www.instagram.com/divisionecalcio5/' },
+    { id: 'facebook', label: 'Facebook', handle: 'DivisioneCalcioacinque', icon: 'logo-facebook', url: 'https://www.facebook.com/DivisioneCalcioacinque' },
   ] as const,
 
   // TODO: sostituire con l'indirizzo dello Shop ufficiale della Divisione.

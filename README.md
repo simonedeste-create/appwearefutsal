@@ -65,7 +65,7 @@ Attenzione: la linea guida App Store 5.1.1(v) consente di rifiutare app che chie
 
 **FUTSAL TV.** Nuova schermata con: diretta in corso (con collegamento al match center), "Prossime dirette" con promemoria, video on demand filtrabili per tipo (highlights, gare integrali, rubriche) e campionato, collegamenti a futsaltv.it e al canale YouTube della Divisione. Ogni partita ha l'indicazione di dove si vede (`broadcast`: FUTSAL TV, YouTube della Divisione o Sky Sport). I video si aprono nel browser integrato (`expo-web-browser`, `config.futsalTv.openInApp`). Con le API della piattaforma FUTSAL TV si potrà passare al player nativo.
 
-**Social.** Componente `SocialLinks` in Home, FUTSAL TV e profilo, alimentato da `config.social`. **Gli indirizzi dei profili sono da verificare** prima della pubblicazione.
+**Social.** Componente `SocialLinks` in Home, FUTSAL TV e profilo, alimentato da `config.social`. Profili ufficiali: Instagram @divisionecalcio5 e Facebook /DivisioneCalcioacinque; per aggiungere TikTok o altri canali basta una riga in `config.social`.
 
 ## Collegare i dati reali
 

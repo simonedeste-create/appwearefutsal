@@ -147,9 +147,9 @@ export function SocialLinks({ compact }: { compact?: boolean }) {
   return (
     <View style={[s.social, compact && { justifyContent: 'flex-start' }]}>
       {config.social.map((x) => (
-        <Pressable key={x.id} onPress={() => openUrl(x.url)} style={s.socialBtn} accessibilityRole="link" accessibilityLabel={`Divisione Calcio a 5 su ${x.label}`}>
-          <Ionicons name={x.icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.ink} />
-          {compact ? null : <Text style={s.socialLabel}>{x.label}</Text>}
+        <Pressable key={x.id} onPress={() => openUrl(x.url)} style={[s.socialBtn, !compact && s.socialWide]} accessibilityRole="link" accessibilityLabel={`Divisione Calcio a 5 su ${x.label}`}>
+          <Ionicons name={x.icon as keyof typeof Ionicons.glyphMap} size={compact ? 20 : 26} color={colors.ink} />
+          {compact ? null : <View><Text style={s.socialName}>{x.label}</Text><Text style={s.socialLabel}>{x.handle}</Text></View>}
         </Pressable>
       ))}
     </View>
@@ -167,9 +167,11 @@ export function Empty({ text }: { text: string }) {
 export const s = StyleSheet.create({
   bc: { flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderRadius: radius.pill, paddingHorizontal: 8, paddingVertical: 3, alignSelf: 'flex-start' },
   bcText: { color: colors.ink, fontSize: 10, fontWeight: '800', letterSpacing: 0.4 },
-  social: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between' },
+  social: { flexDirection: 'row', gap: 10 },
   socialBtn: { alignItems: 'center', justifyContent: 'center', gap: 4, backgroundColor: colors.card, borderRadius: radius.m, borderWidth: 1, borderColor: colors.line, minWidth: 56, minHeight: 56, paddingHorizontal: 8, paddingVertical: 8 },
-  socialLabel: { color: colors.muted, fontSize: 10, fontWeight: '700' },
+  socialWide: { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', gap: 10, paddingHorizontal: 14 },
+  socialName: { color: colors.ink, fontSize: 13, fontWeight: '800' },
+  socialLabel: { color: colors.muted, fontSize: 11, fontWeight: '600' },
   safe: { flex: 1, backgroundColor: colors.bg },
   header: { flexDirection: 'row', alignItems: 'center', gap: space.m - 2, paddingHorizontal: space.l + 2, paddingVertical: space.s },
   logo: { width: 44, height: 30 },
