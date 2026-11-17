@@ -1,10 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import { fmtDay, fmtTime } from '../../src/components/MatchCard';
-import { BroadcastBadge, Card, Chips, Crest, Empty, IconButton, LiveBadge, Loading, PillButton, Screen, useWatch } from '../../src/components/ui';
+import { BroadcastBadge, Card, Chips, Crest, Empty, IconButton, LiveBadge, Loading, PillButton, Screen, Section, openUrl, useWatch } from '../../src/components/ui';
 import { config } from '../../src/config';
 import { data } from '../../src/data/source';
+import { calendarUrl, Pick, useFan } from '../../src/fan';
 import { useData } from '../../src/data/useData';
 import { useTeamMap } from '../../src/data/useTeams';
 import { colors, space, type } from '../../src/theme';
@@ -15,6 +16,7 @@ export default function Partita() {
   const match = useData(() => data.match(String(id)), [id]);
   const [tab, setTab] = useState<'cronaca' | 'formazioni'>('cronaca');
   const watch = useWatch();
+  const fan = useFan();
   const homeP = useData(() => (match.value ? data.players(match.value.homeId) : Promise.resolve([])), [match.value]);
   const awayP = useData(() => (match.value ? data.players(match.value.awayId) : Promise.resolve([])), [match.value]);
   if (match.loading) return <Screen back title="Match center"><Loading /></Screen>;
@@ -47,8 +49,48 @@ export default function Partita() {
       </View>
       <View style={{ flexDirection: 'row', gap: space.s, marginVertical: space.m }}>
         <PillButton label={m.status === 'finished' ? `Rivedi su ${channel === 'Sky Sport' ? 'FUTSAL TV' : channel}` : `Guarda su ${channel}`} icon="play" variant="live" onPress={() => watch(m.status === 'finished' ? (m.futsalTvUrl ?? config.futsalTv.url) : (m.broadcast?.url ?? m.futsalTvUrl ?? config.futsalTv.url))} />
-        <PillButton label="Vota l'MVP" icon="star-outline" variant="ghost" />
+        <PillButton label="Condividi" icon="share-social-outline" variant="ghost" onPress={() => { Share.share({ message: `${h?.name} – ${a?.name} · ${m.roundLabel} · ${fmtDay(m.date)}. Seguila su We are futsal! #WeAreFutsal` }).catch(() => undefined); }} />
       </View>
+      {m.status === 'scheduled' ? (
+        <>
+          <Section title="Il tuo pronostico" />
+          <Card style={{ padding: 12 }}>
+            <View style={{ flexDirection: 'row', gap: space.s }}>
+              {([['1', h?.short], ['X', 'Pareggio'], ['2', a?.short]] as [Pick, string | undefined][]).map(([k, l]) => {
+                const on = fan.pick(m.id) === k;
+                return (
+                  <Pressable key={k} onPress={() => fan.setPick(m.id, k)} accessibilityRole="button" accessibilityState={{ selected: on }} style={[st.pick, on && st.pickOn]}>
+                    <Text style={[st.pickK, on && { color: colors.onLime }]}>{k}</Text>
+                    <Text style={[st.pickL, on && { color: colors.onLime }]}>{l}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+            <Text style={st.hint}>3 punti per ogni pronostico azzeccato. Li trovi in "Il mio futsal".</Text>
+            <View style={{ marginTop: space.s }}>
+              <PillButton label="Aggiungi al calendario" icon="calendar-outline" variant="ghost" onPress={() => openUrl(calendarUrl(`${h?.name} – ${a?.name}`, m.date, m.venue))} />
+            </View>
+          </Card>
+        </>
+      ) : null}
+      {m.status === 'finished' ? (
+        <>
+          <Section title="Vota l'MVP" />
+          <Card style={{ padding: 12 }}>
+            {fan.mvp(m.id) ? <Text style={st.hint}>Hai votato: {[...(homeP.value ?? []), ...(awayP.value ?? [])].find((p) => p.id === fan.mvp(m.id))?.name}. Tocca un altro nome per cambiare.</Text> : <Text style={st.hint}>Scegli il migliore in campo.</Text>}
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.s, marginTop: space.s }}>
+              {[...(homeP.value ?? []).slice(0, 5), ...(awayP.value ?? []).slice(0, 5)].map((p) => {
+                const on = fan.mvp(m.id) === p.id;
+                return (
+                  <Pressable key={p.id} onPress={() => fan.setMvp(m.id, p.id)} accessibilityRole="button" accessibilityState={{ selected: on }} style={[st.mv, on && st.pickOn]}>
+                    <Text style={[st.mvT, on && { color: colors.onLime }]} numberOfLines={1}>{p.number} {p.name}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Card>
+        </>
+      ) : null}
       <Chips items={[{ id: 'cronaca', label: 'Cronaca' }, { id: 'formazioni', label: 'Formazioni' }]} value={tab} onChange={setTab} />
       {tab === 'cronaca' ? (
         m.events?.length ? (
@@ -91,5 +133,12 @@ const st = StyleSheet.create({
   ev: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 },
   evBorder: { borderTopWidth: 1, borderTopColor: colors.line },
   evMin: { color: colors.muted, fontSize: 11, fontWeight: '700', width: 48 },
+  pick: { flex: 1, backgroundColor: colors.card2, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
+  pickOn: { backgroundColor: colors.lime },
+  pickK: { color: colors.ink, fontSize: 20, fontWeight: '900' },
+  pickL: { color: colors.muted, fontSize: 11, fontWeight: '600' },
+  hint: { color: colors.muted, fontSize: 12, marginTop: space.s },
+  mv: { backgroundColor: colors.card2, borderRadius: 10, paddingVertical: 7, paddingHorizontal: 10, maxWidth: '48%' },
+  mvT: { color: colors.ink, fontSize: 12, fontWeight: '600' },
   evText: { color: colors.ink, fontSize: 13, flex: 1 },
 });

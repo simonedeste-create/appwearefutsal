@@ -67,6 +67,13 @@ Attenzione: la linea guida App Store 5.1.1(v) consente di rifiutare app che chie
 
 **Social.** Componente `SocialLinks` in Home, FUTSAL TV e profilo, alimentato da `config.social`. Profili ufficiali: Instagram @divisionecalcio5 e Facebook /DivisioneCalcioacinque; per aggiungere TikTok o altri canali basta una riga in `config.social`.
 
+## Funzioni per i tifosi (da benchmark)
+
+- **Pronostici 1-X-2** nel match center: 3 punti per ogni gara azzeccata, conteggio nella fan card di "Il mio futsal".
+- **Voto all'MVP** a fine gara (idea da myPremierLeague e dal "man of the match" richiesto dai fan della Bundesliga).
+- **Aggiungi al calendario** e **Condividi** la partita.
+- I dati restano sul dispositivo (`src/fan.ts`); con il backend diventeranno classifiche e leghe tra amici.
+
 ## Collegare i dati reali
 
 Le schermate leggono i dati **solo** tramite `data` in `src/data/source.ts`, che implementa l'interfaccia `DataSource`. Per passare ai dati reali si scrive una nuova implementazione e la si assegna a `data`, senza toccare le schermate.
