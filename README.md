@@ -97,6 +97,10 @@ Le schermate leggono i dati **solo** tramite `data` in `src/data/source.ts`, che
 | Prodotti | Shop della Divisione |
 | Biglietti | Vivaticket |
 
+## Architettura, requisiti tecnici e fasi
+
+Vedi [`docs/ARCHITETTURA.md`](docs/ARCHITETTURA.md): API intermedia, cache offline, prestazioni, temi chiaro/scuro, accessibilità, privacy e stima delle fasi (MVP, beta, store).
+
 ## Prossime fasi
 
 1. **Backend** (consigliato Firebase): database in tempo reale, accesso staff con ruoli, archivio immagini, notifiche push (Expo Notifications + FCM/APNs).
