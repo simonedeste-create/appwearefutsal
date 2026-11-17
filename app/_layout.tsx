@@ -27,6 +27,10 @@ function Navigator() {
         <Stack.Screen name="profilo" />
         <Stack.Screen name="prodotto/[id]" />
         <Stack.Screen name="carrello" />
+        <Stack.Screen name="cerca" />
+        <Stack.Screen name="comunicati" />
+        <Stack.Screen name="partner" />
+        <Stack.Screen name="notifiche" />
       </Stack.Protected>
       <Stack.Protected guard={!user}>
         <Stack.Screen name="(auth)" options={{ animation: 'fade' }} />

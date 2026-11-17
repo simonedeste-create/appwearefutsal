@@ -153,3 +153,33 @@ export interface EventModule {
   matches: Match[];
   teams: Team[];
 }
+
+export type CommuniqueKind = 'Giudice sportivo' | 'Comunicato ufficiale' | 'Designazioni arbitrali' | 'Calendari';
+export interface Communique {
+  id: string;
+  kind: CommuniqueKind;
+  date: string; // ISO 8601
+  title: string;
+  body: string;
+  competitionId?: string;
+  /** PDF ufficiale del comunicato, se pubblicato */
+  pdfUrl?: string;
+}
+
+export interface Partner {
+  id: string;
+  name: string;
+  tier: 'principale' | 'secondario';
+  /** ruolo del partner, solo se confermato dalla Divisione */
+  role?: string;
+  /** pagina del partner o offerta riservata alla community */
+  url?: string;
+  offer?: string;
+}
+
+export interface SearchResults {
+  teams: Team[];
+  players: Player[];
+  news: NewsItem[];
+  communiques: Communique[];
+}

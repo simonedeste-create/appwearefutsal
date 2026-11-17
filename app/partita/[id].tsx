@@ -7,6 +7,7 @@ import { config } from '../../src/config';
 import { data } from '../../src/data/source';
 import { calendarUrl, useFan } from '../../src/fan';
 import { useData } from '../../src/data/useData';
+import { useNotifPrefs } from '../../src/notifications';
 import { useTeamMap } from '../../src/data/useTeams';
 import { colors, space, type } from '../../src/theme';
 
@@ -17,6 +18,7 @@ export default function Partita() {
   const [tab, setTab] = useState<'cronaca' | 'formazioni'>('cronaca');
   const watch = useWatch();
   const fan = useFan();
+  const np = useNotifPrefs();
   const homeP = useData(() => (match.value ? data.players(match.value.homeId) : Promise.resolve([])), [match.value]);
   const awayP = useData(() => (match.value ? data.players(match.value.awayId) : Promise.resolve([])), [match.value]);
   if (match.loading) return <Screen back title="Match center"><Loading /></Screen>;
@@ -32,7 +34,7 @@ export default function Partita() {
   );
   const channel = m.broadcast?.channel ?? 'FUTSAL TV';
   return (
-    <Screen back title="Match center" right={<IconButton name="notifications-outline" label="Attiva notifiche per questa partita" />}>
+    <Screen back title="Match center" right={<IconButton name={np.hasMatchAlert(m.id) ? 'notifications' : 'notifications-outline'} label={np.hasMatchAlert(m.id) ? 'Disattiva gli avvisi di questa partita' : 'Ricevi gli avvisi di questa partita'} onPress={() => np.toggleMatchAlert(m.id)} />}>
       <View style={st.hero}>
         <Text style={[type.label, { color: colors.muted, textAlign: 'center' }]}>{m.roundLabel} · {fmtDay(m.date)}</Text>
         <View style={st.scoreRow}>

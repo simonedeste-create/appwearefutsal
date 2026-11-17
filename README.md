@@ -73,6 +73,13 @@ Attenzione: la linea guida App Store 5.1.1(v) consente di rifiutare app che chie
 - **Aggiungi al calendario** e **Condividi** la partita.
 - Il voto resta sul dispositivo (`src/fan.ts`); con il backend diventerà un voto unico per utente.
 
+## Ricerca, comunicati, partner e notifiche
+
+- **Ricerca** (icona in Home): squadre, giocatori, news e comunicati (`data.search`).
+- **Comunicati ufficiali**: giudice sportivo, designazioni arbitrali, calendari, con link al PDF ufficiale; fonte prevista il sito della Divisione.
+- **Partner**: elenco 2026/27 principali e secondari; loghi, link e offerte da confermare con l'ufficio marketing.
+- **Notifiche live score** (`src/notifications.ts`, `src/push.ts`, schermata Notifiche): scelta per le squadre seguite o per tutte le partite, eventi (inizio, gol, intervallo, rossi, finale) e campanella per singola partita. L'app chiede il permesso e registra il token con `pushBackend`; **l'invio a ogni gol lo fa il backend**, che deve ricevere gli eventi live (TuttoCampo o l'area staff). Le push non funzionano in Expo Go su Android né sul web: servono una build di sviluppo e un progetto EAS. Aggiunto `expo-notifications`: eseguire `npm install` e `npx expo install --fix`.
+
 ## Shop
 
 Catalogo, scheda prodotto e carrello sono nell'app; il pagamento si completa sullo shop ufficiale (`config.shopUrl`, https://shop.divisionecalcioa5.it) aperto dentro l'app. Per acquistare senza uscire dall'app serve che lo shop metta a disposizione le sue API: basta un'altra implementazione di `ShopBackend` in `src/shop.ts`. Catalogo e prezzi in `mock.ts` sono di esempio.

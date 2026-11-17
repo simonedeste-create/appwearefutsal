@@ -3,7 +3,7 @@
 // (es. TuttoCampo per calendari e risultati, sito per news, backend per live e statistiche).
 import * as mock from './mock';
 import type {
-  Competition, EventModule, Match, NewsItem, Player, Product, StandingRow, Team, Video,
+  Communique, Competition, EventModule, Partner, SearchResults, Match, NewsItem, Player, Product, StandingRow, Team, Video,
 } from './types';
 
 export interface DataSource {
@@ -24,6 +24,9 @@ export interface DataSource {
   product(id: string): Promise<Product | undefined>;
   events(): Promise<EventModule[]>;
   event(slug: string): Promise<EventModule | undefined>;
+  communiques(filter?: { kind?: Communique['kind'] }): Promise<Communique[]>;
+  partners(): Promise<Partner[]>;
+  search(query: string): Promise<SearchResults>;
 }
 
 const ok = <T,>(v: T) => Promise.resolve(v);
@@ -75,6 +78,21 @@ export const mockSource: DataSource = {
   product: (id) => ok(mock.products.find((p) => p.id === id)),
   events: () => ok(mock.events),
   event: (slug) => ok(mock.events.find((e) => e.slug === slug)),
+  communiques: (f = {}) => ok(mock.communiques
+    .filter((c) => !f.kind || c.kind === f.kind)
+    .sort((a, b) => b.date.localeCompare(a.date))),
+  partners: () => ok(mock.partners),
+  search: (q) => {
+    const n = q.trim().toLowerCase();
+    const has = (...t: string[]) => t.some((x) => x.toLowerCase().includes(n));
+    if (n.length < 2) return ok({ teams: [], players: [], news: [], communiques: [] });
+    return ok({
+      teams: mock.teams.filter((t) => has(t.name, t.city)).slice(0, 8),
+      players: mock.players.filter((p) => has(p.name)).slice(0, 8),
+      news: mock.news.filter((x) => has(x.title, x.body)),
+      communiques: mock.communiques.filter((c) => has(c.title, c.body, c.kind)),
+    });
+  },
 };
 
 /** Sorgente attiva. Sostituire con la sorgente reale quando disponibile. */

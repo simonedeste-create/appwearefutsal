@@ -11,13 +11,6 @@ import { useFan } from '../src/fan';
 import { useData } from '../src/data/useData';
 import { colors, space, type } from '../src/theme';
 
-const PREFS = [
-  { id: 'start', label: 'Inizio partita e gol' },
-  { id: 'final', label: 'Risultati finali' },
-  { id: 'tv', label: 'Dirette FUTSAL TV' },
-  { id: 'shop', label: 'Offerte dello Shop' },
-] as const;
-
 function Row({ label, value, onChange, first }: { label: string; value: boolean; onChange: (v: boolean) => void; first?: boolean }) {
   return (
     <View style={[st.pref, !first && { borderTopWidth: 1, borderTopColor: colors.line }]}>
@@ -30,7 +23,6 @@ function Row({ label, value, onChange, first }: { label: string; value: boolean;
 export default function Profilo() {
   const { user, signOut, deleteAccount, updateProfile } = useAuth();
   const teams = useData(() => data.teams());
-  const [prefs, setPrefs] = useState<Record<string, boolean>>({ start: true, final: true, tv: true, shop: false });
   const fan = useFan();
   const all = teams.value ?? [];
   const followed = user?.favoriteTeamIds.length ? all.filter((t) => user.favoriteTeamIds.includes(t.id)) : [];
@@ -89,8 +81,9 @@ export default function Profilo() {
       </View>
 
       <Section title="Notifiche" />
-      <Card style={{ paddingHorizontal: 14 }}>
-        {PREFS.map((p, i) => <Row key={p.id} first={i === 0} label={p.label} value={!!prefs[p.id]} onChange={(v: boolean) => setPrefs((x) => ({ ...x, [p.id]: v }))} />)}
+      <Card style={{ padding: 14 }} onPress={() => router.push('/notifiche')}>
+        <Text style={{ color: colors.ink, fontSize: 14, fontWeight: '700' }}>Gol e live score</Text>
+        <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>Scegli le partite e gli eventi per cui ricevere gli avvisi ›</Text>
       </Card>
 
       <Section title="Privacy e consensi" />

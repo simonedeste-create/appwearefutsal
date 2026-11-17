@@ -17,6 +17,8 @@ export default function Home() {
   const live = useData(() => data.matches({ status: 'live' }));
   const events = useData(() => data.events());
   const news = useData(() => data.news());
+  const comm = useData(() => data.communiques());
+  const partners = useData(() => data.partners());
   const scorers = useData(() => data.topScorers('serie-a', 3));
   const featured = events.value?.[0];
 
@@ -28,7 +30,7 @@ export default function Home() {
   ];
 
   return (
-    <Screen right={<><IconButton name="search" label="Cerca" /><IconButton name="person-circle-outline" label="Il mio futsal" onPress={() => router.push('/profilo')} /></>}>
+    <Screen right={<><IconButton name="search" label="Cerca" onPress={() => router.push('/cerca')} /><IconButton name="person-circle-outline" label="Il mio futsal" onPress={() => router.push('/profilo')} /></>}>
       {featured ? (
         <Pressable onPress={() => router.push(`/evento/${featured.slug}`)} style={[st.hero, { backgroundColor: featured.theme.primary }]}>
           <Text style={[type.label, { color: colors.lime }]}>In evidenza · {featured.kicker}</Text>
@@ -65,6 +67,18 @@ export default function Home() {
         </Card>
       ))}
 
+      {comm.value?.length ? (
+        <>
+          <Section title="Comunicati ufficiali" action="Tutti" onAction={() => router.push('/comunicati')} />
+          {comm.value.slice(0, 2).map((c) => (
+            <Card key={c.id} style={st.news} onPress={() => router.push('/comunicati')}>
+              <Text style={[type.label, { color: colors.oro }]}>{c.kind}</Text>
+              <Text style={st.newsTitle}>{c.title}</Text>
+            </Card>
+          ))}
+        </>
+      ) : null}
+
       {scorers.value?.length ? (
         <>
           <Section title="Capocannonieri Serie A" />
@@ -82,6 +96,12 @@ export default function Home() {
           </Card>
         </>
       ) : null}
+
+      <Section title="I nostri partner" action="Tutti" onAction={() => router.push('/partner')} />
+      <Card style={{ padding: 14 }} onPress={() => router.push('/partner')}>
+        <Text style={{ color: colors.ink, fontSize: 13, fontWeight: '700' }}>{(partners.value ?? []).filter((p) => p.tier === 'principale').slice(0, 6).map((p) => p.name).join(' · ')}</Text>
+        <Text style={st.muted}>e tutti gli altri partner della stagione 2026/27</Text>
+      </Card>
 
       <Section title="Segui la Divisione" />
       <SocialLinks />

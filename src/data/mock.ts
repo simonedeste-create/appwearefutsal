@@ -3,6 +3,7 @@
 // (TuttoCampo, sito divisionecalcioa5.it, FUTSAL TV, Shop, Vivaticket, VEO).
 import { config } from '../config';
 import type {
+  Communique, Partner,
   Competition, EventModule, Match, NewsItem, Player, Product, Team, Video,
 } from './types';
 
@@ -248,4 +249,36 @@ export const events: EventModule[] = [
     matches: [],
     teams: [],
   },
+];
+
+// Comunicati di esempio: testi e numeri inventati, da sostituire con quelli pubblicati sul sito.
+export const communiques: Communique[] = [
+  { id: 'c1', kind: 'Giudice sportivo', date: '2026-11-17', competitionId: 'serie-a', title: 'Serie A – Decisioni del Giudice sportivo (12ª giornata)', body: 'Il Giudice sportivo ha esaminato i referti della 12ª giornata. Provvedimenti disciplinari, squalifiche e ammende sono riportati nel comunicato ufficiale.' },
+  { id: 'c2', kind: 'Designazioni arbitrali', date: '2026-11-16', competitionId: 'serie-a', title: 'Serie A – Designazioni arbitrali 13ª giornata', body: 'Pubblicate le designazioni degli arbitri e degli osservatori per la 13ª giornata del campionato.' },
+  { id: 'c3', kind: 'Comunicato ufficiale', date: '2026-11-14', title: 'Futsal Finalissime Coppa Italia: sedi e date', body: 'Le Finalissime si disputeranno a Barletta, Bisceglie e Giovinazzo. Il programma completo è nella sezione Eventi.' },
+  { id: 'c4', kind: 'Calendari', date: '2026-11-12', competitionId: 'serie-a-f', title: 'Serie A Femminile – Variazioni di calendario', body: 'Variazioni di data e orario per alcune gare della Serie A Femminile, come da comunicato.' },
+  { id: 'c5', kind: 'Giudice sportivo', date: '2026-11-10', competitionId: 'a2-elite', title: 'Serie A2 Elite – Decisioni del Giudice sportivo', body: 'Decisioni del Giudice sportivo relative alle gare del fine settimana.' },
+];
+
+// Partner 2026/27 (elenco fornito dalla Divisione). Ruoli, link, loghi e offerte da confermare con l'ufficio marketing.
+export const partners: Partner[] = [
+  { id: 'thesis', name: 'Thesis', tier: 'principale' },
+  { id: 'munich', name: 'MUNICH', tier: 'principale' },
+  { id: 'kinto', name: 'KINTO', tier: 'principale', role: 'Convenzione per le società della Divisione' },
+  { id: 'sport-network', name: 'Corriere dello Sport e Tuttosport', tier: 'principale', role: 'Media partner' },
+  { id: 'adisport', name: 'Adisport', tier: 'principale' },
+  { id: 'babylon', name: 'Babylon', tier: 'principale' },
+  { id: 'lete', name: 'Lete', tier: 'principale' },
+  { id: 'gtz', name: 'GTZ', tier: 'principale' },
+  { id: 'sky', name: 'Sky', tier: 'principale', role: 'Trasmissione dei grandi eventi' },
+  { id: 'tutigol', name: 'Tutigol', tier: 'principale' },
+  { id: 'regione-er', name: 'Regione Emilia-Romagna', tier: 'principale' },
+  { id: 'coppe-targhe', name: 'Coppe-targhe.com', tier: 'principale' },
+  { id: 'gammasport', name: 'Gammasport', tier: 'principale' },
+  { id: 'digital-vision', name: 'Digital Vision', tier: 'secondario' },
+  { id: 'shop', name: 'Shop Divisione', tier: 'secondario', role: 'Shop ufficiale', url: config.shopUrl },
+  { id: 'tuttocampo', name: 'Tuttocampo', tier: 'secondario', role: 'Calendari e risultati' },
+  { id: 'display', name: 'Display Corporation', tier: 'secondario', role: 'Fornitore dei led' },
+  { id: 'rewind', name: 'Rewind', tier: 'secondario' },
+  { id: 'altuofianco', name: 'Altuofianco', tier: 'secondario' },
 ];
