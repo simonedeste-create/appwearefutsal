@@ -7,7 +7,7 @@ import { useAuth } from '../src/auth/AuthContext';
 import { Card, Crest, PillButton, Screen, Section, SocialLinks, openUrl } from '../src/components/ui';
 import { config } from '../src/config';
 import { data } from '../src/data/source';
-import { scorePicks, useFan } from '../src/fan';
+import { useFan } from '../src/fan';
 import { useData } from '../src/data/useData';
 import { colors, space, type } from '../src/theme';
 
@@ -32,8 +32,6 @@ export default function Profilo() {
   const teams = useData(() => data.teams());
   const [prefs, setPrefs] = useState<Record<string, boolean>>({ start: true, final: true, tv: true, shop: false });
   const fan = useFan();
-  const finished = useData(() => data.matches({ status: 'finished' }));
-  const game = scorePicks(fan.picks, finished.value ?? []);
   const all = teams.value ?? [];
   const followed = user?.favoriteTeamIds.length ? all.filter((t) => user.favoriteTeamIds.includes(t.id)) : [];
 
@@ -72,7 +70,7 @@ export default function Profilo() {
         <View>
           <Text style={st.name}>{user.firstName} {user.lastName}</Text>
           <Text style={{ color: colors.white, opacity: 0.85, fontSize: 12 }}>{user.email} · iscritto dal {new Date(user.createdAt).toLocaleDateString('it-IT')}</Text>
-          <Text style={{ color: colors.white, opacity: 0.85, fontSize: 12, marginTop: 4 }}>{game.points} punti · pronostici azzeccati {game.right} su {game.played} · MVP votati {fan.mvpCount}</Text>
+          <Text style={{ color: colors.white, opacity: 0.85, fontSize: 12, marginTop: 4 }}>MVP votati: {fan.mvpCount}</Text>
         </View>
       </View>
 

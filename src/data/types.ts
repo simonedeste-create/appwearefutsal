@@ -17,6 +17,8 @@ export interface Team {
   competitionId: string;
   city: string;
   venue: string;
+  /** elenco delle gare della squadra su FUTSAL TV, se la piattaforma lo fornisce */
+  futsalTvUrl?: string;
 }
 
 export type MatchStatus = 'scheduled' | 'live' | 'finished';
@@ -116,8 +118,16 @@ export interface Product {
   name: string;
   category: string;
   emoji: string;
+  /** prezzo in centesimi di euro */
+  priceCents: number;
+  description: string;
+  /** taglie disponibili, se il prodotto le prevede */
+  sizes?: string[];
+  /** pagina del prodotto sullo shop ufficiale */
   url: string;
 }
+
+export interface CartLine { productId: string; size?: string; qty: number }
 
 export type EventModuleKey = 'programma' | 'sedi' | 'biglietti' | 'info' | 'news';
 

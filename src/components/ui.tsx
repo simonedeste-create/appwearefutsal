@@ -19,6 +19,12 @@ export const openVideo = (url?: string) => {
   } else openUrl(url);
 };
 
+/** Apre una pagina web dentro l'app (es. lo shop ufficiale). */
+export const openInApp = (url?: string) => {
+  if (!url) return;
+  WebBrowser.openBrowserAsync(url, { toolbarColor: colors.bg, controlsColor: colors.oro, dismissButtonStyle: 'close' }).catch(() => openUrl(url));
+};
+
 /** Restituisce la funzione per guardare un video: chiede l'accesso se config.authMode lo richiede. */
 export function useWatch() {
   const { needsLogin } = useAuth();

@@ -193,11 +193,12 @@ export const videos: Video[] = [
   { id: 'r2', kind: 'rubrica', channel: 'FUTSAL TV', title: 'Verso le Finalissime', subtitle: 'Speciale Coppa Italia', duration: '12:30', url: config.futsalTv.url },
 ];
 
+// Catalogo di esempio: nomi e prezzi vanno sostituiti con quelli di shop.divisionecalcioa5.it.
 export const products: Product[] = [
-  { id: 'p1', name: 'Felpa #WeAreFutsal', category: 'Abbigliamento', emoji: '👕', url: config.shopUrl },
-  { id: 'p2', name: 'Pallone ufficiale', category: 'Palloni', emoji: '⚽', url: config.shopUrl },
-  { id: 'p3', name: 'Sciarpa Finalissime', category: 'Eventi', emoji: '🧣', url: config.shopUrl },
-  { id: 'p4', name: 'Cappellino', category: 'Abbigliamento', emoji: '🧢', url: config.shopUrl },
+  { id: 'p1', name: 'Felpa #WeAreFutsal', category: 'Abbigliamento', emoji: '👕', priceCents: 4900, description: 'Felpa ufficiale della collezione #WeAreFutsal.', sizes: ['XS','S','M','L','XL'], url: config.shopUrl },
+  { id: 'p2', name: 'Pallone ufficiale', category: 'Palloni', emoji: '⚽', priceCents: 3900, description: 'Pallone da futsal a rimbalzo controllato.', url: config.shopUrl },
+  { id: 'p3', name: 'Sciarpa Finalissime', category: 'Eventi', emoji: '🧣', priceCents: 1800, description: 'Sciarpa delle Finalissime di Coppa Italia in Puglia.', url: config.shopUrl },
+  { id: 'p4', name: 'Cappellino', category: 'Abbigliamento', emoji: '🧢', priceCents: 2200, description: 'Cappellino ufficiale con il logo della Divisione.', url: config.shopUrl },
 ];
 
 // Moduli evento ("app nell'app"). Squadre e partite degli eventi da caricare quando ufficiali.

@@ -5,7 +5,7 @@ import { fmtDay, fmtTime } from '../../src/components/MatchCard';
 import { BroadcastBadge, Card, Chips, Crest, Empty, IconButton, LiveBadge, Loading, PillButton, Screen, Section, openUrl, useWatch } from '../../src/components/ui';
 import { config } from '../../src/config';
 import { data } from '../../src/data/source';
-import { calendarUrl, Pick, useFan } from '../../src/fan';
+import { calendarUrl, useFan } from '../../src/fan';
 import { useData } from '../../src/data/useData';
 import { useTeamMap } from '../../src/data/useTeams';
 import { colors, space, type } from '../../src/theme';
@@ -52,26 +52,9 @@ export default function Partita() {
         <PillButton label="Condividi" icon="share-social-outline" variant="ghost" onPress={() => { Share.share({ message: `${h?.name} – ${a?.name} · ${m.roundLabel} · ${fmtDay(m.date)}. Seguila su We are futsal! #WeAreFutsal` }).catch(() => undefined); }} />
       </View>
       {m.status === 'scheduled' ? (
-        <>
-          <Section title="Il tuo pronostico" />
-          <Card style={{ padding: 12 }}>
-            <View style={{ flexDirection: 'row', gap: space.s }}>
-              {([['1', h?.short], ['X', 'Pareggio'], ['2', a?.short]] as [Pick, string | undefined][]).map(([k, l]) => {
-                const on = fan.pick(m.id) === k;
-                return (
-                  <Pressable key={k} onPress={() => fan.setPick(m.id, k)} accessibilityRole="button" accessibilityState={{ selected: on }} style={[st.pick, on && st.pickOn]}>
-                    <Text style={[st.pickK, on && { color: colors.onLime }]}>{k}</Text>
-                    <Text style={[st.pickL, on && { color: colors.onLime }]}>{l}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-            <Text style={st.hint}>3 punti per ogni pronostico azzeccato. Li trovi in "Il mio futsal".</Text>
-            <View style={{ marginTop: space.s }}>
-              <PillButton label="Aggiungi al calendario" icon="calendar-outline" variant="ghost" onPress={() => openUrl(calendarUrl(`${h?.name} – ${a?.name}`, m.date, m.venue))} />
-            </View>
-          </Card>
-        </>
+        <View style={{ marginBottom: space.s }}>
+          <PillButton label="Aggiungi al calendario" icon="calendar-outline" variant="ghost" onPress={() => openUrl(calendarUrl(`${h?.name} – ${a?.name}`, m.date, m.venue))} />
+        </View>
       ) : null}
       {m.status === 'finished' ? (
         <>
@@ -133,10 +116,7 @@ const st = StyleSheet.create({
   ev: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 },
   evBorder: { borderTopWidth: 1, borderTopColor: colors.line },
   evMin: { color: colors.muted, fontSize: 11, fontWeight: '700', width: 48 },
-  pick: { flex: 1, backgroundColor: colors.card2, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
   pickOn: { backgroundColor: colors.lime },
-  pickK: { color: colors.ink, fontSize: 20, fontWeight: '900' },
-  pickL: { color: colors.muted, fontSize: 11, fontWeight: '600' },
   hint: { color: colors.muted, fontSize: 12, marginTop: space.s },
   mv: { backgroundColor: colors.card2, borderRadius: 10, paddingVertical: 7, paddingHorizontal: 10, maxWidth: '48%' },
   mvT: { color: colors.ink, fontSize: 12, fontWeight: '600' },

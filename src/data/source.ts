@@ -21,6 +21,7 @@ export interface DataSource {
   newsItem(id: string): Promise<NewsItem | undefined>;
   videos(filter?: { kind?: Video['kind']; competitionId?: string; matchId?: string }): Promise<Video[]>;
   products(): Promise<Product[]>;
+  product(id: string): Promise<Product | undefined>;
   events(): Promise<EventModule[]>;
   event(slug: string): Promise<EventModule | undefined>;
 }
@@ -71,6 +72,7 @@ export const mockSource: DataSource = {
   videos: (f = {}) => ok(mock.videos.filter((v) =>
     (!f.kind || v.kind === f.kind) && (!f.competitionId || v.competitionId === f.competitionId) && (!f.matchId || v.matchId === f.matchId))),
   products: () => ok(mock.products),
+  product: (id) => ok(mock.products.find((p) => p.id === id)),
   events: () => ok(mock.events),
   event: (slug) => ok(mock.events.find((e) => e.slug === slug)),
 };

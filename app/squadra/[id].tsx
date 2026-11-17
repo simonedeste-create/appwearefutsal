@@ -2,7 +2,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { MatchCard } from '../../src/components/MatchCard';
-import { Card, Crest, Empty, IconButton, Loading, Screen, Section } from '../../src/components/ui';
+import { Card, Crest, Empty, IconButton, Loading, PillButton, Screen, Section, useWatch } from '../../src/components/ui';
+import { config } from '../../src/config';
 import { data } from '../../src/data/source';
 import { useData } from '../../src/data/useData';
 import { useTeamMap } from '../../src/data/useTeams';
@@ -13,6 +14,7 @@ export default function Squadra() {
   const teams = useTeamMap();
   const team = useData(() => data.team(String(id)), [id]);
   const roster = useData(() => data.players(String(id)), [id]);
+  const watch = useWatch();
   const matches = useData(() => data.matches({ teamId: String(id) }), [id]);
   if (team.loading) return <Screen back title="Squadra"><Loading /></Screen>;
   const t = team.value;
@@ -27,6 +29,9 @@ export default function Squadra() {
           <Text style={st.name}>{t.name}</Text>
           <Text style={[type.small, { color: colors.white, opacity: 0.8 }]}>📍 {t.venue}</Text>
         </View>
+      </View>
+      <View style={{ marginTop: space.m }}>
+        <PillButton label="Tutte le partite su FUTSAL TV" icon="tv-outline" variant="live" onPress={() => watch(t.futsalTvUrl ?? config.futsalTv.teamUrl(t.name))} />
       </View>
       {next.length ? <><Section title="Prossime gare" />{next.map((m) => <MatchCard key={m.id} match={m} home={teams[m.homeId]} away={teams[m.awayId]} />)}</> : null}
       {last.length ? <><Section title="Ultimi risultati" />{last.map((m) => <MatchCard key={m.id} match={m} home={teams[m.homeId]} away={teams[m.awayId]} />)}</> : null}

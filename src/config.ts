@@ -21,6 +21,8 @@ export const config = {
     youtubeUrl: 'https://www.youtube.com/@DivisioneCalcioaCinque',
     /** Le dirette si aprono nel browser interno dell'app; con il player/SDK della piattaforma si potranno vedere dentro l'app. */
     openInApp: true,
+    /** Elenco delle partite di una squadra su FUTSAL TV. DA VERIFICARE con la piattaforma: oggi è una ricerca per nome. */
+    teamUrl: (teamName: string) => `https://www.futsaltv.it/?s=${encodeURIComponent(teamName)}`,
   },
 
   // Canali ufficiali della Divisione Calcio a 5 (come nelle descrizioni del canale YouTube ufficiale).
@@ -29,8 +31,10 @@ export const config = {
     { id: 'facebook', label: 'Facebook', handle: 'DivisioneCalcioacinque', icon: 'logo-facebook', url: 'https://www.facebook.com/DivisioneCalcioacinque' },
   ] as const,
 
-  // TODO: sostituire con l'indirizzo dello Shop ufficiale della Divisione.
-  shopUrl: 'https://www.divisionecalcioa5.it',
+  // Shop ufficiale della Divisione.
+  shopUrl: 'https://shop.divisionecalcioa5.it',
+  shopLoginUrl: 'https://shop.divisionecalcioa5.it/customer/login',
+  shopReturnUrl: 'https://shop.divisionecalcioa5.it/page/return-policy',
   siteUrl: 'https://www.divisionecalcioa5.it',
   vivaticketUrl: 'https://www.vivaticket.com',
   privacyUrl: 'https://www.divisionecalcioa5.it/privacy-policy', // DA VERIFICARE
