@@ -61,7 +61,7 @@ Attenzione: la linea guida App Store 5.1.1(v) consente di rifiutare app che chie
 - Schermate: `app/(auth)/accesso.tsx`, `registrazione.tsx`, `password.tsx`. Il blocco è in `app/_layout.tsx` (`Stack.Protected`).
 - Registrazione: nome, cognome, email, data di nascita, password (8+ caratteri, lettere e numeri), accettazione termini e privacy (obbligatoria), consensi marketing e partner separati e facoltativi. Sotto i 14 anni (età del consenso digitale in Italia) serve la conferma del consenso del genitore.
 - `src/auth/localBackend.ts` salva gli account **solo sul dispositivo**, per sviluppo. In produzione va sostituito con un servizio vero (es. Firebase Authentication o il sistema di identità della LND) che implementi `AuthBackend` in `src/auth/types.ts`: email di conferma, recupero password, cancellazione lato server.
-- Testi di informativa privacy e termini d'uso: da far redigere/validare all'ufficio legale (URL in `config.privacyUrl` e `config.termsUrl`).
+- Testi di informativa privacy e termini d'uso: bozze in `docs/legale/` (informativa, termini, testi brevi per consensi e notifiche), da validare con l'ufficio legale (URL in `config.privacyUrl` e `config.termsUrl`).
 
 **FUTSAL TV.** Nuova schermata con: diretta in corso (con collegamento al match center), "Prossime dirette" con promemoria, video on demand filtrabili per tipo (highlights, gare integrali, rubriche) e campionato, collegamenti a futsaltv.it e al canale YouTube della Divisione. Ogni partita ha l'indicazione di dove si vede (`broadcast`: FUTSAL TV, YouTube della Divisione o Sky Sport). I video si aprono nel browser integrato (`expo-web-browser`, `config.futsalTv.openInApp`). Con le API della piattaforma FUTSAL TV si potrà passare al player nativo.
 
